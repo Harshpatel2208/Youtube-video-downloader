@@ -299,6 +299,50 @@ function findGeneratedMedia(prefix, ext) {
   return files.length ? files[0] : null;
 }
 
+function parseYtdlpJson(raw) {
+  if (!raw) return null;
+  if (typeof raw === 'object') return raw;
+
+  const text = String(raw).trim();
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text);
+  } catch (_err) {
+    const firstObj = text.indexOf('{');
+    const lastObj = text.lastIndexOf('}');
+    if (firstObj >= 0 && lastObj > firstObj) {
+      try {
+        return JSON.parse(text.slice(firstObj, lastObj + 1));
+      } catch (_err2) {
+        return null;
+      }
+    }
+    return null;
+  }
+}
+
+async function getPlaylistTotalWithYtDlp(playlistUrl) {
+  const output = await runYoutubeDlWithFallback(
+    playlistUrl,
+    buildYoutubeDlOptions({
+      noPlaylist: false,
+      flatPlaylist: true,
+      dumpSingleJson: true,
+      skipDownload: true,
+    })
+  );
+
+  const parsed = parseYtdlpJson(output);
+  const total = Number(
+    parsed?.playlist_count ||
+    parsed?.n_entries ||
+    (Array.isArray(parsed?.entries) ? parsed.entries.length : 0)
+  ) || 0;
+
+  return total;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // 5.5 Background Job Queue System
 // ─────────────────────────────────────────────────────────────────────────────
@@ -643,7 +687,7 @@ function scrapePlaylistEntries(playlistUrl, startNum, endNum) {
       res.on('data', chunk => html += chunk);
       res.on('end', () => {
         // Extract ytInitialData JSON embedded in the page by YouTube
-        const dataMatch = html.match(/var ytInitialData = ({.+?});<\/script>/s);
+        const dataMatch = html.match(/(?:var\s+ytInitialData\s*=|window\["ytInitialData"\]\s*=)\s*({.+?})\s*;<\/script>/s);
         if (!dataMatch) {
           // Fallback: try regex-based extraction of videoIds and titles directly
           const videoIdRe = /"videoId":"([a-zA-Z0-9_-]{11})"/g;
@@ -713,7 +757,19 @@ app.get('/youtube-playlist-meta', async (req, res) => {
   }
 
   try {
-    const { total } = await scrapePlaylistEntries(playlistUrl, 1, 1);
+    let total = 0;
+
+    try {
+      total = await getPlaylistTotalWithYtDlp(playlistUrl);
+    } catch (ytErr) {
+      console.warn('[YT Playlist Meta] yt-dlp count failed, falling back to HTML scrape:', ytErr.message);
+    }
+
+    if (!total) {
+      const scraped = await scrapePlaylistEntries(playlistUrl, 1, 1);
+      total = Number(scraped?.total) || 0;
+    }
+
     return res.json({ total });
   } catch (err) {
     console.error('[YT Playlist Meta Error]', err.message);
