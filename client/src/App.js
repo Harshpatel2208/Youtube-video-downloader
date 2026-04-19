@@ -1,8 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
-// Point axios directly at the backend so we never rely on the React proxy
-axios.defaults.baseURL = 'http://localhost:3000';
+// Use explicit API URL in production; fall back to localhost during local development.
+const API_BASE_URL = process.env.REACT_APP_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:3000' : window.location.origin);
+axios.defaults.baseURL = API_BASE_URL;
 
 
 // ─── SVG Circular Progress Ring ───────────────────────────────────────────────

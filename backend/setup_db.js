@@ -1,13 +1,28 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const db = new Pool({
-  host:     process.env.DB_HOST     || 'localhost',
-  port:     parseInt(process.env.DB_PORT || '5432', 10),
-  database: process.env.DB_NAME     || 'converter_db',
-  user:     process.env.DB_USER     || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-});
+const usingConnectionString = Boolean(process.env.DATABASE_URL);
+const shouldUseSsl =
+  process.env.DB_SSL === 'true' ||
+  /sslmode=require/i.test(process.env.DATABASE_URL || '') ||
+  /neon\.tech/i.test(process.env.DB_HOST || '') ||
+  /neon\.tech/i.test(process.env.DATABASE_URL || '');
+
+const dbConfig = usingConnectionString
+  ? { connectionString: process.env.DATABASE_URL }
+  : {
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      database: process.env.DB_NAME || 'converter_db',
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.DB_PASSWORD || '',
+    };
+
+if (shouldUseSsl) {
+  dbConfig.ssl = { rejectUnauthorized: false };
+}
+
+const db = new Pool(dbConfig);
 
 async function setup() {
   try {
