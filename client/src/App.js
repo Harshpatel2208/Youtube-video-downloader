@@ -1,8 +1,27 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
+function resolveApiBaseUrl() {
+  const raw = (process.env.REACT_APP_API_URL || '').trim();
+  if (raw) {
+    try {
+      const parsed = new URL(raw);
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+        return raw;
+      }
+      console.warn('[Config] REACT_APP_API_URL must be http/https. Ignoring invalid value.');
+    } catch (_err) {
+      console.warn('[Config] REACT_APP_API_URL is not a valid URL. Ignoring invalid value.');
+    }
+  }
+
+  return window.location.hostname === 'localhost'
+    ? 'http://localhost:3000'
+    : window.location.origin;
+}
+
 // Use explicit API URL in production; fall back to localhost during local development.
-const API_BASE_URL = process.env.REACT_APP_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:3000' : window.location.origin);
+const API_BASE_URL = resolveApiBaseUrl();
 axios.defaults.baseURL = API_BASE_URL;
 
 
