@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    @apply min-h-full;
+  }
+
+  body {
+    @apply bg-slate-950 text-ink antialiased;
+    background-image:
+      radial-gradient(circle at 12% 12%, rgba(95, 124, 255, 0.22), transparent 34%),
+      radial-gradient(circle at 82% 0%, rgba(44, 229, 181, 0.2), transparent 30%),
+      linear-gradient(180deg, #090d1f 0%, #070a18 40%, #05070f 100%);
+  }
+}
+
+@layer components {
+  .app {
+    @apply mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-6 px-4 pb-16 pt-8 md:px-8;
+  }
+
+  .header {
+    @apply flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5;
+  }
+
+  .logo {
+    @apply flex items-center gap-3;
+  }
+
+  .logo-icon {
+    @apply text-4xl;
+    filter: drop-shadow(0 0 16px rgba(95, 124, 255, 0.5));
+  }
+
+  .logo h1 {
+    @apply bg-gradient-to-r from-electric to-neon bg-clip-text text-3xl font-extrabold leading-tight text-transparent;
+  }
+
+  .logo p {
+    @apply text-sm text-muted;
+  }
+
+  .header-stats {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .stat {
+    @apply rounded-full border border-white/10 bg-panelSoft px-3 py-1 text-xs text-muted;
+  }
+
+  .stat b { @apply text-ink; }
+  .s-done { @apply text-emerald-400 !important; }
+  .s-fail { @apply text-rose-400 !important; }
+
+  .tabs {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .drop-zone {
+    @apply relative overflow-hidden rounded-2xl border border-dashed border-white/15 bg-panel/70 p-8 text-center backdrop-blur-sm transition-all duration-300;
+  }
+
+  .drop-zone:hover,
+  .drop-zone.active {
+    @apply border-electric/70 bg-panelSoft/70 shadow-glow;
+  }
+
+  .drop-icon { @apply mb-2 text-4xl; }
+  .drop-title { @apply text-lg font-semibold text-ink; }
+  .drop-sub { @apply text-sm text-muted; }
+
+  .action-bar {
+    @apply flex flex-wrap items-center gap-3;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-transparent px-5 py-2.5 text-sm font-semibold transition-all duration-200;
+  }
+
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-electric to-neon text-slate-950 shadow-lg shadow-electric/30;
+  }
+
+  .btn-ghost {
+    @apply border-white/10 bg-panelSoft text-muted;
+  }
+
+  .btn-sm {
+    @apply rounded-lg px-3 py-1.5 text-xs;
+  }
+
+  .btn-download {
+    @apply bg-emerald-500 text-white shadow-md shadow-emerald-500/30;
+  }
+
+  .btn-remove {
+    @apply border-rose-400/40 text-rose-400;
+  }
+
+  .progress-wrap {
+    @apply rounded-2xl border border-white/10 bg-panel/80 p-4;
+  }
+
+  .progress-labels {
+    @apply mb-2 flex items-center justify-between text-sm text-muted;
+  }
+
+  .progress-track {
+    @apply h-2 overflow-hidden rounded-full bg-white/10;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full bg-gradient-to-r from-electric to-neon transition-all duration-300;
+  }
+
+  .upload-fill {
+    @apply bg-gradient-to-r from-cyan-400 to-sky-500;
+  }
+
+  .table-wrap {
+    @apply overflow-hidden rounded-2xl border border-white/10 bg-panel/80 shadow-2xl shadow-black/30;
+  }
+
+  .file-table {
+    @apply w-full border-collapse;
+  }
+
+  .file-table thead tr {
+    @apply border-b border-white/10 bg-panelSoft/80;
+  }
+
+  .file-table th {
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted;
+  }
+
+  .file-table tbody tr {
+    @apply border-b border-white/10 transition-all duration-200;
+  }
+
+  .file-table tbody tr:hover {
+    @apply bg-white/5;
+  }
+
+  .file-table tbody tr:last-child {
+    @apply border-b-0;
+  }
+
+  .file-table tbody tr.row-progress {
+    background-image: linear-gradient(
+      90deg,
+      rgba(74, 222, 128, 0.24) 0,
+      rgba(74, 222, 128, 0.24) var(--row-fill, 0%),
+      transparent var(--row-fill, 0%),
+      transparent 100%
+    );
+  }
+
+  .file-table tbody tr.row-done {
+    box-shadow: inset 0 0 0 1px rgba(74, 222, 128, 0.35);
+  }
+
+  .file-table tbody tr.row-fail {
+    @apply bg-rose-500/10;
+  }
+
+  .file-table td {
+    @apply px-4 py-3 align-middle text-sm;
+  }
+
+  .td-num { @apply w-12 text-muted; }
+  .td-ring { @apply w-11 p-2; }
+  .td-size { @apply w-16 text-muted; }
+
+  .td-name {
+    @apply max-w-[360px] overflow-hidden text-ellipsis whitespace-nowrap font-medium;
+  }
+
+  .chip {
+    @apply inline-block rounded-full px-3 py-1 text-xs font-semibold;
+  }
+
+  .chip-queued { @apply bg-white/10 text-slate-300; }
+  .chip-uploading { @apply bg-cyan-400/20 text-cyan-300; }
+  .chip-processing { @apply animate-pulse bg-electric/30 text-indigo-200; }
+  .chip-completed { @apply bg-emerald-400/20 text-emerald-300; }
+  .chip-failed { @apply bg-rose-500/20 text-rose-300; }
+
+  .err-tip { @apply ml-1 cursor-help text-rose-400; }
+
+  .empty-state {
+    @apply rounded-2xl border border-dashed border-white/15 bg-panel/60 p-10 text-center text-sm text-muted;
+  }
+
+  .footer {
+    @apply mt-auto border-t border-white/10 pt-3 text-center text-xs text-muted;
+  }
+
+  .ring-svg {
+    @apply block;
+  }
+
+  .ring-spin {
+    transform-origin: 20px 20px;
+    animation: spin-ring 1.2s linear infinite;
+  }
+}
+
+@keyframes spin-ring {
+  from {
+    stroke-dashoffset: 0;
+    transform: rotate(0deg);
+    transform-origin: 20px 20px;
+  }
+  to {
+    stroke-dashoffset: -101;
+    transform: rotate(360deg);
+    transform-origin: 20px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .file-table th:nth-child(3),
+  .file-table td:nth-child(3) {
+    display: none;
+  }
+}

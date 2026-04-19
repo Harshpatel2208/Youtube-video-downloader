@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+client/build/
+dist/
+
+# Runtime storage
+backend/uploads/
+backend/converted/
+backend/*.mp3
+backend/*.wav
+backend/*.m4a
+backend/*.webm
+backend/*.part
+
+# Logs and temp
+*.log
+*.tmp
+*.temp
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/

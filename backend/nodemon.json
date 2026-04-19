@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "client/*",
+    "uploads/*",
+    "converted/*",
+    "test.js"
+  ],
+  "delay": 1500
+}

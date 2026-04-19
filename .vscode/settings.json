@@ -1,0 +1,31 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "Test-Path": true,
+        "/^Set-Location \\.\\\\backend; node \\.\\\\test_download\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node -e \"const y=require\\('yt-dlp-exec'\\); y\\('https://www\\.youtube\\.com/watch\\?v=dQw4w9WgXcQ',\\{extractAudio:true,audioFormat:'mp3',audioQuality:0,output:'tmp-test\\.mp3',noPlaylist:true,ffmpegLocation:undefined\\}\\)\\.then\\(\\(\\)=>console\\.log\\('ok'\\)\\)\\.catch\\(e=>console\\.error\\('err:',e\\.message\\)\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node --check \\.\\\\server\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node -e \"const y=require\\('yt-dlp-exec'\\); y\\('--version'\\)\\.then\\(v=>console\\.log\\('yt-dlp-version:',v\\)\\)\\.catch\\(e=>console\\.error\\(e\\.message\\)\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node -e \"const y=require\\('yt-dlp-exec'\\); y\\('https://youtu\\.be/N0tongd7qj0\\?si=uzMFuHz5o7UYJvDn',\\{listFormats:true,noWarnings:true,noPlaylist:true,cookies:'C:/HARSH1/PROJECTS/PROJECTS/converter/backend/cookies\\.txt',extractorArgs:'youtube:player_client=android'\\}\\)\\.then\\(o=>console\\.log\\(typeof o==='string'\\?o:JSON\\.stringify\\(o\\)\\.slice\\(0,1200\\)\\)\\)\\.catch\\(e=>console\\.error\\('fail:',e\\.stderr\\|\\|e\\.message\\)\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        ".\\node_modules\\yt-dlp-exec\\bin\\yt-dlp.exe": true,
+        "git rev-parse": true,
+        "git remote": true,
+        "git push": true,
+        "git ls-remote": true,
+        "git -c core.compression=0": true
+    }
+}
