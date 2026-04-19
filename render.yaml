@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: youtube-video-downloader-backend
+    env: docker
+    rootDir: backend
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSL
+        value: "true"
+      - key: CONCURRENCY
+        value: "2"
+      - key: YTDLP_JS_RUNTIMES
+        value: node
+      - key: YTDLP_REMOTE_COMPONENTS
+        value: ejs:github
